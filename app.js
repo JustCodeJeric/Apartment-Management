@@ -108,6 +108,9 @@ const views = {
                     <td>
                         <small style="color: #666;">${t.status === 'Paid' ? 'Paid on:' : 'Due by:'}</small><br>
                         <strong>${t.date || 'No Date'}</strong>
+                        
+                        ${t.lastPaidDate ? `<br><small style="color: #7f8c8d;">Last Paid: ${t.lastPaidDate}</small>` : ''}
+                        
                         ${t.amountPaid ? `<br><small style="color: var(--success); font-weight: bold;">Amount: ₱${t.amountPaid}</small>` : ''}
                     </td>
                     <td>
@@ -140,7 +143,6 @@ function router(page) {
 }
 
 function togglePayment(index) {
-    // Wrap in a brief timeout so mobile OS touch events can clear out first
     setTimeout(() => {
         const tenant = appData.tenants[index];
 
@@ -151,7 +153,7 @@ function togglePayment(index) {
                 return; 
             }
 
-            // Mobile-friendly date assignment
+            // Get current processing date
             const d = new Date();
             const year = d.getFullYear();
             const month = String(d.getMonth() + 1).padStart(2, '0');
@@ -161,21 +163,24 @@ function togglePayment(index) {
             tenant.status = "Paid";
             tenant.amountPaid = amount;
             tenant.date = today;
+            tenant.lastPaidDate = today; // NEW: Saves this date permanently as history
 
             alert(`Payment of ₱${amount} recorded!`);
         } else {
+            // Moving back to unpaid for the next billing cycle
             if (confirm(`Change ${tenant.name}'s status back to Unpaid?`)) {
                 const nextDueDate = prompt("Enter next rent due date (YYYY-MM-DD):", tenant.date);
                 if (nextDueDate === null) return;
 
                 tenant.status = "Unpaid";
-                tenant.date = nextDueDate;
-                tenant.amountPaid = null;
+                tenant.date = nextDueDate; // Updates current target deadline
+                tenant.amountPaid = null;  // Clears the amount tracker until they pay again
+                // Note: tenant.lastPaidDate is NOT cleared here, so it stays visible!
             }
         }
         
         saveAndRefresh('tenants');
-    }, 50); // 50ms delay is invisible to users but massive for mobile processing threads
+    }, 50);
 }
 
 function addNewTenant() {
