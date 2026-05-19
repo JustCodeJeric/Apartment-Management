@@ -1,0 +1,126 @@
+/* 1. ROOT VARIABLES & RESET */
+:root {
+    --primary: #2c3e50;
+    --accent: #3498db;
+    --bg: #f8f9fa;
+    --text: #333;
+    --success: #2ecc71;
+    --danger: #e74c3c;
+    --white: #ffffff;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    display: flex;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* 2. SIDEBAR */
+.sidebar {
+    width: 240px; height: 100vh;
+    background: var(--primary); color: var(--white);
+    padding: 20px; position: fixed; left: 0; top: 0;
+    z-index: 1000; transition: 0.3s ease;
+}
+
+.logo {
+    white-space: nowrap; /* Keeps the name on one line */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Adds ... if the screen is too tiny */
+    font-size: 1.2rem; /* Slightly smaller if it feels too cramped */
+}
+nav button {
+    width: 100%; padding: 12px 15px; margin-bottom: 10px;
+    background: rgba(255,255,255,0.05); color: var(--white);
+    border: none; text-align: left; cursor: pointer;
+    border-radius: 8px; transition: 0.2s;
+}
+
+nav button:hover { background: var(--accent); }
+
+/* 3. MOBILE UI */
+#mobile-menu-btn {
+    display: none; position: fixed; top: 15px; left: 15px;
+    z-index: 1100; padding: 10px 20px; background: var(--primary);
+    color: white; border: none; border-radius: 5px; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+}
+
+#view-port { margin-left: 240px; padding: 40px; width: 100%; transition: 0.3s ease; }
+
+/* 4. CARDS & FORMS */
+.card { 
+    background: var(--white); 
+    padding: 20px; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05); 
+    margin-bottom: 20px; 
+}
+
+/* Forces everything into a single, vertical column */
+.room-form { 
+    display: grid; 
+    grid-template-columns: 1fr; 
+    gap: 12px; 
+}
+
+/* This ensures the button and title stay aligned in the single column */
+.room-form h3, .room-form button { 
+    grid-column: 1 / -1; 
+}
+
+input, select { 
+    padding: 12px; 
+    border: 1px solid #ddd; 
+    border-radius: 6px; 
+    font-size: 1rem; 
+    width: 100%; 
+    outline: none; 
+}
+
+input, select { padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; width: 100%; outline: none; }
+input:focus { border-color: var(--accent); }
+
+/* 5. TABLE BUTTONS */
+.status-btn { padding: 6px 10px; border: none; border-radius: 4px; color: white; cursor: pointer; font-weight: bold; font-size: 0.8rem; }
+.status-btn.paid { background: var(--success); }
+.status-btn.unpaid { background: #e67e22; }
+.remove-btn { background: var(--danger); color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem; }
+
+/* 6. ROOM CARDS */
+.room-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+.room-card { background: var(--white); border-radius: 15px; overflow: hidden; box-shadow: 0 6px 12px rgba(0,0,0,0.08); border-top: 6px solid transparent; transition: 0.3s; }
+.room-card.vacant { border-top-color: var(--success); }
+.room-card.occupied { border-top-color: var(--danger); }
+.room-img { width: 100%; height: 180px; object-fit: cover; }
+.room-info { padding: 15px; }
+.badge { display: inline-block; margin-top: 10px; font-weight: bold; }
+
+/* 7. TABLE STYLE */
+table { width: 100%; border-collapse: collapse; background: var(--white); border-radius: 10px; overflow: hidden; }
+th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
+
+/* 8. MOBILE RESPONSIVE */
+/* --- 8. MOBILE RESPONSIVENESS --- */
+@media (max-width: 768px) {
+    #mobile-menu-btn { display: block; }
+    .sidebar { left: -240px; }
+    .sidebar.active { left: 0; }
+    #view-port { 
+        margin-left: 0 !important; 
+        padding: 80px 20px 20px 20px; 
+    }
+
+    /* Keeps everything elongated/vertical on small screens */
+    .room-form, .card-grid, .room-grid { 
+        grid-template-columns: 1fr; 
+    }
+    
+    th, td { 
+        padding: 10px 5px; 
+        font-size: 0.8rem; 
+    }
+}

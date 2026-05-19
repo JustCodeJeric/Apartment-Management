@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AptManager | SPA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <button id="mobile-menu-btn" onclick="toggleMenu()">☰ Menu</button>
+
+    <aside class="sidebar" id="sidebar">
+    <div class="logo">MARICYL BLDG.</div>
+    <nav>
+        <button onclick="router('dashboard'); toggleMenu()">Dashboard</button>
+        <button onclick="router('tenants'); toggleMenu()">Tenants</button>
+        <button onclick="router('maintenance'); toggleMenu()">Maintenance</button>
+    </nav>
+</aside>
+
+    <main id="view-port">
+        </main>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyAht_Y2CmD6EUAu-cb--r0pEStOdChfaD4",
+        authDomain: "apartment-rental-management.firebaseapp.com",
+        databaseURL: "https://apartment-rental-management-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "apartment-rental-management",
+        storageBucket: "apartment-rental-management.firebasestorage.app",
+        messagingSenderId: "18219888001",
+        appId: "1:18219888001:web:2eb940fb5dd6201aa90c80",
+        measurementId: "G-Z7KWPSVKZG"
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const db = getDatabase(app);
+
+      // Attach to window so app.js can see them
+      window.db = db;
+      window.dbRef = ref;
+      window.dbSet = set;
+      window.dbOnValue = onValue;
+
+      console.log("Firebase initialized!");
+    </script>
+
+    <script src="app.js"></script>
+</body>
+</html>
