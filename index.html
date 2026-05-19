@@ -42,11 +42,9 @@
         measurementId: "G-Z7KWPSVKZG"
       };
 
-      // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const db = getDatabase(app);
 
-      // Attach to window so app.js can see them
       window.db = db;
       window.dbRef = ref;
       window.dbSet = set;
