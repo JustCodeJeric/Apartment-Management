@@ -49,7 +49,11 @@ body.logged-out #view-port {
     letter-spacing: 2px; 
     color: var(--accent); 
     text-align: center; 
+    
+    /* ADD THIS: Gives extra breathing room on top so it clears the mobile menu button */
+    margin-top: 50px; 
     margin-bottom: 35px; 
+    
     padding-bottom: 15px;
     border-bottom: 1px solid rgba(255,255,255,0.08); 
     text-transform: uppercase;
