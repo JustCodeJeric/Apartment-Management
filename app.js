@@ -1,11 +1,16 @@
 // --- 1. DATA LOGIC & AUTHENTICATION GUARD ---
 let appData = { tenants: [], rooms: [], maintenance: [] };
-let firebaseListener = null; // Keeps track of data synchronization
 
-// Monitor Auth State changes natively
-window.addEventListener('DOMContentLoaded', () => {
-    console.log("App starting, tracking auth state...");
+// Track auth changes cleanly across initialization cycles
+function initAuthGuard() {
+    console.log("Initializing secure authentication guard...");
     
+    if (typeof window.onAuthChange !== 'function') {
+        console.warn("Firebase Auth modules not initialized yet. Retrying in 100ms...");
+        setTimeout(initAuthGuard, 100);
+        return;
+    }
+
     window.onAuthChange(window.auth, (user) => {
         const sidebar = document.getElementById('sidebar');
         const mobileBtn = document.getElementById('mobile-menu-btn');
@@ -15,22 +20,27 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log("Access Granted: Admin authenticated.");
             if (sidebar) sidebar.style.display = 'block';
             if (mobileBtn) mobileBtn.style.display = 'block';
-            if (bodyEl) bodyEl.style.display = 'flex'; // Restore side-by-side dashboard layout
+            if (bodyEl) bodyEl.style.display = 'flex'; 
             
-            // Sync database rows only when securely authenticated
             listenForDataSync();
         } else {
             console.log("Access Denied: Showing Login Interface.");
             if (sidebar) sidebar.style.display = 'none';
             if (mobileBtn) mobileBtn.style.display = 'none';
-            if (bodyEl) bodyEl.style.display = 'block'; // Adapt body layout for fullscreen login panel
+            if (bodyEl) bodyEl.style.display = 'block'; 
             
-            // Clean up database listeners on sign out
             appData = { tenants: [], rooms: [], maintenance: [] };
             router('login');
         }
     });
-});
+}
+
+// Trigger initial check safely
+if (document.readyState === 'loading') {
+    window.addEventListener('DOMContentLoaded', initAuthGuard);
+} else {
+    initAuthGuard();
+}
 
 function listenForDataSync() {
     window.dbOnValue(window.dbRef(window.db, "/"), (snapshot) => {
@@ -41,7 +51,6 @@ function listenForDataSync() {
             appData.maintenance = data.maintenance ? Object.values(data.maintenance) : [];
         }
         
-        // Direct logged-in user to view the building status overview
         if (document.getElementById('email-login-field') === null) {
             router('dashboard'); 
         }
@@ -55,7 +64,9 @@ function handleLogin(e) {
     const loginError = document.getElementById('login-error-msg');
 
     window.signIn(window.auth, email, password)
-        .then(() => console.log("Logged in successfully!"))
+        .then(() => {
+            console.log("Logged in successfully!");
+        })
         .catch((error) => {
             console.error(error);
             if (loginError) loginError.innerText = "Invalid Admin Credentials.";
@@ -81,21 +92,29 @@ function saveAndRefresh(page) {
 
 // --- 2. VIEW TEMPLATES ---
 const views = {
-    // NEW: Elegant minimalist secure entry portal view
     login: () => `
-        <div style="max-width: 400px; margin: 100px auto; padding: 30px; text-align: center;">
-            <h2 style="margin-bottom: 10px; font-weight: 800; letter-spacing: 1px; color: #111;">MARICYL BLDG.</h2>
-            <p style="color: #666; margin-bottom: 25px; font-size: 0.9rem;">Property Management System Portal</p>
-            <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 15px;">
-                <input type="email" id="email-login-field" placeholder="Admin Email" required 
-                       style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
-                <input type="password" id="password-login-field" placeholder="Password" required 
-                       style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px;">
-                <div id="login-error-msg" style="color:var(--danger); font-size:0.85rem; text-align:left; min-height:18px;"></div>
-                <button type="submit" style="background:#111; color:#cfac62; border:none; padding:14px; border-radius:6px; font-weight:bold; cursor:pointer;">
-                    Secure Sign In
-                </button>
-            </form>
+        <div style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; 
+                    background: #f4f6f8; display: flex; justify-content: center; 
+                    align-items: center; z-index: 99999; box-sizing: border-box; padding: 20px;">
+            <div style="width: 100%; max-width: 400px; background: white; padding: 40px 30px; 
+                        border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;">
+                
+                <h2 style="margin: 0 0 5px 0; font-weight: 800; letter-spacing: 1px; color: #111; font-family: 'Segoe UI', sans-serif;">MARICYL BLDG.</h2>
+                <p style="color: #666; margin: 0 0 30px 0; font-size: 0.9rem; font-family: 'Segoe UI', sans-serif;">Property Management Portal</p>
+                
+                <form onsubmit="handleLogin(event)" style="display: flex; flex-direction: column; gap: 15px;">
+                    <input type="email" id="email-login-field" placeholder="Admin Email" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                    <input type="password" id="password-login-field" placeholder="Password" required 
+                           style="width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; box-sizing: border-box;">
+                    
+                    <div id="login-error-msg" style="color: #e74c3c; font-size: 0.85rem; text-align: left; min-height: 18px; font-family: 'Segoe UI', sans-serif;"></div>
+                    
+                    <button type="submit" style="background: #111; color: #cfac62; border: none; padding: 14px; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; width: 100%;">
+                        Secure Sign In
+                    </button>
+                </form>
+            </div>
         </div>
     `,
 
@@ -198,7 +217,8 @@ const views = {
 // --- 3. LOGIC FUNCTIONS ---
 function router(page) {
     const content = views[page] ? views[page]() : '<h1>404 Not Found</h1>';
-    document.getElementById('view-port').innerHTML = content;
+    const viewPort = document.getElementById('view-port');
+    if (viewPort) viewPort.innerHTML = content;
 }
 
 function togglePayment(index) {
