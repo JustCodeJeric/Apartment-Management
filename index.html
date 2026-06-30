@@ -24,32 +24,40 @@
     <main id="view-port">
     </main>
 
-    <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-      import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+   <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getDatabase, ref, set, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyAht_Y2CmD6EUAu-cb--r0pEStOdChfaD4",
-        authDomain: "apartment-rental-management.firebaseapp.com",
-        databaseURL: "https://apartment-rental-management-default-rtdb.asia-southeast1.firebasedatabase.app",
-        projectId: "apartment-rental-management",
-        storageBucket: "apartment-rental-management.firebasestorage.app",
-        messagingSenderId: "18219888001",
-        appId: "1:18219888001:web:2eb940fb5dd6201aa90c80",
-        measurementId: "G-Z7KWPSVKZG"
-      };
+  const firebaseConfig = {
+    apiKey: "AIzaSyAht_Y2CmD6EUAu-cb--r0pEStOdChfaD4",
+    authDomain: "apartment-rental-management.firebaseapp.com",
+    databaseURL: "https://apartment-rental-management-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "apartment-rental-management",
+    storageBucket: "apartment-rental-management.firebasestorage.app",
+    messagingSenderId: "18219888001",
+    appId: "1:18219888001:web:2eb940fb5dd6201aa90c80",
+    measurementId: "G-Z7KWPSVKZG"
+  };
 
-      const app = initializeApp(firebaseConfig);
-      const db = getDatabase(app);
 
-      window.db = db;
-      window.dbRef = ref;
-      window.dbSet = set;
-      window.dbOnValue = onValue;
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
 
-      console.log("Firebase initialized!");
-    </script>
+ 
+  window.db = db;
+  window.dbRef = ref;
+  window.dbSet = set;
+  window.dbOnValue = onValue;
+  
 
-    <script src="app.js"></script>
+  window.auth = auth;
+  window.signIn = signInWithEmailAndPassword;
+  window.logOut = signOut;
+  window.onAuthChange = onAuthStateChanged;
+
+  console.log("Firebase & Auth initialized!");
+</script>
 </body>
 </html>
