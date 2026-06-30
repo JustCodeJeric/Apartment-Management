@@ -1,7 +1,6 @@
 // --- 1. DATA LOGIC & AUTHENTICATION GUARD ---
 let appData = { tenants: [], rooms: [], maintenance: [] };
 
-// Track auth changes cleanly across initialization cycles
 function initAuthGuard() {
     console.log("Initializing secure authentication guard...");
     
@@ -20,14 +19,14 @@ function initAuthGuard() {
             console.log("Access Granted: Admin authenticated.");
             if (sidebar) sidebar.style.display = 'block';
             if (mobileBtn) mobileBtn.style.display = 'block';
-            if (bodyEl) bodyEl.style.display = 'flex'; 
+            if (bodyEl) bodyEl.classList.remove('logged-out'); // Restore regular side-by-side flex layout
             
             listenForDataSync();
         } else {
             console.log("Access Denied: Showing Login Interface.");
             if (sidebar) sidebar.style.display = 'none';
             if (mobileBtn) mobileBtn.style.display = 'none';
-            if (bodyEl) bodyEl.style.display = 'block'; 
+            if (bodyEl) bodyEl.classList.add('logged-out'); // Break flex design constraints for clean sign-in view
             
             appData = { tenants: [], rooms: [], maintenance: [] };
             router('login');
@@ -35,7 +34,6 @@ function initAuthGuard() {
     });
 }
 
-// Trigger initial check safely
 if (document.readyState === 'loading') {
     window.addEventListener('DOMContentLoaded', initAuthGuard);
 } else {
@@ -291,7 +289,6 @@ function toggleMenu() {
     }
 }
 
-// Map globally scoped functions to window objects so raw HTML onclick tags can execute them
 window.router = router;
 window.handleLogin = handleLogin;
 window.handleLogout = handleLogout;
