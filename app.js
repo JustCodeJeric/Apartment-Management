@@ -9,11 +9,13 @@ window.addEventListener('DOMContentLoaded', () => {
     window.onAuthChange(window.auth, (user) => {
         const sidebar = document.getElementById('sidebar');
         const mobileBtn = document.getElementById('mobile-menu-btn');
+        const bodyEl = document.body;
 
         if (user) {
             console.log("Access Granted: Admin authenticated.");
             if (sidebar) sidebar.style.display = 'block';
             if (mobileBtn) mobileBtn.style.display = 'block';
+            if (bodyEl) bodyEl.style.display = 'flex'; // Restore side-by-side dashboard layout
             
             // Sync database rows only when securely authenticated
             listenForDataSync();
@@ -21,6 +23,7 @@ window.addEventListener('DOMContentLoaded', () => {
             console.log("Access Denied: Showing Login Interface.");
             if (sidebar) sidebar.style.display = 'none';
             if (mobileBtn) mobileBtn.style.display = 'none';
+            if (bodyEl) bodyEl.style.display = 'block'; // Adapt body layout for fullscreen login panel
             
             // Clean up database listeners on sign out
             appData = { tenants: [], rooms: [], maintenance: [] };
