@@ -1,8 +1,8 @@
 /* 1. ROOT VARIABLES & RESET */
 :root {
-    --primary: #2c3e50;
-    --accent: #3498db;
-    --bg: #f8f9fa;
+    --primary: #111111;       /* Premium charcoal background */
+    --accent: #cfac62;        /* Premium gold matching your tab icon */
+    --bg: #f4f6f8;            /* Smooth light grey content background */
     --text: #333;
     --success: #2ecc71;
     --danger: #e74c3c;
@@ -19,11 +19,20 @@ body {
     min-height: 100vh;
 }
 
+/* Helper rule for when user is completely logged out */
+body.logged-out {
+    display: block !important;
+}
+body.logged-out #view-port {
+    margin-left: 0 !important;
+    padding: 0 !important;
+}
+
 /* 2. SIDEBAR & LOGO */
 .sidebar {
     width: 240px; 
     height: 100vh;
-    background: #111111; /* Sleek premium charcoal dark mode */
+    background: #111111; 
     color: #ffffff;
     padding: 25px 20px; 
     position: fixed; 
@@ -38,11 +47,11 @@ body {
     font-size: 1.3rem; 
     font-weight: 800; 
     letter-spacing: 2px; 
-    color: #cfac62; /* Premium gold to match your tab icon */
+    color: var(--accent); 
     text-align: center; 
     margin-bottom: 35px; 
     padding-bottom: 15px;
-    border-bottom: 1px solid rgba(255,255,255,0.08); /* Clean divider line */
+    border-bottom: 1px solid rgba(255,255,255,0.08); 
     text-transform: uppercase;
 }
 
@@ -51,7 +60,7 @@ nav button {
     padding: 12px 15px; 
     margin-bottom: 10px;
     background: rgba(255,255,255,0.02); 
-    color: #aec1d4; /* Soft readable menu text */
+    color: #aec1d4; 
     border: none; 
     text-align: left; 
     cursor: pointer;
@@ -61,9 +70,9 @@ nav button {
 }
 
 nav button:hover { 
-    background: rgba(207, 172, 98, 0.12); /* Subtle gold tint on hover */
+    background: rgba(207, 172, 98, 0.12); 
     color: #ffffff;
-    padding-left: 20px; /* Slight modern push animation */
+    padding-left: 20px; 
 }
 
 /* 3. MOBILE UI */
@@ -84,14 +93,12 @@ nav button:hover {
     margin-bottom: 20px; 
 }
 
-/* Forces everything into a single, vertical column */
 .room-form { 
     display: grid; 
     grid-template-columns: 1fr; 
     gap: 12px; 
 }
 
-/* This ensures the button and title stay aligned in the single column */
 .room-form h3, .room-form button { 
     grid-column: 1 / -1; 
 }
@@ -104,8 +111,6 @@ input, select {
     width: 100%; 
     outline: none; 
 }
-
-input, select { padding: 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; width: 100%; outline: none; }
 input:focus { border-color: var(--accent); }
 
 /* 5. TABLE BUTTONS */
@@ -128,7 +133,6 @@ table { width: 100%; border-collapse: collapse; background: var(--white); border
 th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
 
 /* 8. MOBILE RESPONSIVE */
-/* --- 8. MOBILE RESPONSIVENESS --- */
 @media (max-width: 768px) {
     #mobile-menu-btn { display: block; }
     .sidebar { left: -240px; }
@@ -137,12 +141,9 @@ th, td { padding: 15px; text-align: left; border-bottom: 1px solid #eee; }
         margin-left: 0 !important; 
         padding: 80px 20px 20px 20px; 
     }
-
-    /* Keeps everything elongated/vertical on small screens */
     .room-form, .card-grid, .room-grid { 
         grid-template-columns: 1fr; 
     }
-    
     th, td { 
         padding: 10px 5px; 
         font-size: 0.8rem; 
