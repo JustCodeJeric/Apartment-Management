@@ -19,28 +19,52 @@ body {
     min-height: 100vh;
 }
 
-/* 2. SIDEBAR */
+/* 2. SIDEBAR & LOGO */
 .sidebar {
-    width: 240px; height: 100vh;
-    background: var(--primary); color: var(--white);
-    padding: 20px; position: fixed; left: 0; top: 0;
-    z-index: 1000; transition: 0.3s ease;
+    width: 240px; 
+    height: 100vh;
+    background: #111111; /* Sleek premium charcoal dark mode */
+    color: #ffffff;
+    padding: 25px 20px; 
+    position: fixed; 
+    left: 0; 
+    top: 0;
+    z-index: 1000; 
+    transition: 0.3s ease;
+    box-shadow: 4px 0 15px rgba(0,0,0,0.1);
 }
 
-.logo {
-    white-space: nowrap; /* Keeps the name on one line */
-    overflow: hidden;
-    text-overflow: ellipsis; /* Adds ... if the screen is too tiny */
-    font-size: 1.2rem; /* Slightly smaller if it feels too cramped */
+.logo { 
+    font-size: 1.3rem; 
+    font-weight: 800; 
+    letter-spacing: 2px; 
+    color: #cfac62; /* Premium gold to match your tab icon */
+    text-align: center; 
+    margin-bottom: 35px; 
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.08); /* Clean divider line */
+    text-transform: uppercase;
 }
+
 nav button {
-    width: 100%; padding: 12px 15px; margin-bottom: 10px;
-    background: rgba(255,255,255,0.05); color: var(--white);
-    border: none; text-align: left; cursor: pointer;
-    border-radius: 8px; transition: 0.2s;
+    width: 100%; 
+    padding: 12px 15px; 
+    margin-bottom: 10px;
+    background: rgba(255,255,255,0.02); 
+    color: #aec1d4; /* Soft readable menu text */
+    border: none; 
+    text-align: left; 
+    cursor: pointer;
+    border-radius: 8px; 
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 
-nav button:hover { background: var(--accent); }
+nav button:hover { 
+    background: rgba(207, 172, 98, 0.12); /* Subtle gold tint on hover */
+    color: #ffffff;
+    padding-left: 20px; /* Slight modern push animation */
+}
 
 /* 3. MOBILE UI */
 #mobile-menu-btn {
